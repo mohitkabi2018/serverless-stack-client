@@ -1,4 +1,75 @@
+/* Notes.css */
+
+.Notes form {
+  background-color: #2b2f36;   /* Slightly lighter than page background */
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
 .Notes form textarea {
-height: 300px;
-font-size: 1.5rem;
+  height: 300px;
+  font-size: 1.1rem;
+  background-color: #1e2127;   /* dark box */
+  color: #e5e7eb;              /* light gray text */
+  border: 1px solid #3a3f47;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.Notes form textarea:focus {
+  border-color: #38bdf8; /* cyan accent */
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3);
+  outline: none;
+}
+
+.Notes form label {
+  font-weight: 600;
+  color: #d1d5db; /* light gray */
+  margin-top: 10px;
+  display: block;
+}
+
+.Notes input[type="file"] {
+  background-color: #2d323b;
+  color: #e5e7eb;
+  border: 1px solid #3a3f47;
+  border-radius: 6px;
+  padding: 6px;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.Notes button.btn-primary {
+  background-color: #2563eb;  /* blue-600 */
+  border: none;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.Notes button.btn-primary:hover {
+  background-color: #1d4ed8; /* blue-700 */
+}
+
+.Notes button.btn-danger {
+  background-color: #dc2626; /* red-600 */
+  border: none;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 8px;
+  margin-top: 15px;
+  margin-left: 10px;
+}
+
+.Notes button.btn-danger:hover {
+  background-color: #b91c1c; /* red-700 */
+}
+
+.Notes img {
+  max-width: 280px;
+  margin: 12px 0;
+  border-radius: 6px;
+  border: 1px solid #3a3f47;
 }

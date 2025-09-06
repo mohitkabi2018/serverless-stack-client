@@ -7,3 +7,37 @@
     max-width: 320px;
   }
 }
+.Signup form {
+  background-color: #2b2f38;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+.Signup form label {
+  color: #cbd5e1;
+  font-weight: 500;
+}
+.Signup form input {
+  background-color: #1f2937;
+  border: 1px solid #374151;
+  color: #f9fafb;
+}
+.Signup form input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+.Signup button {
+  background: linear-gradient(90deg, #0ec940, #059669);
+  border: none;
+  margin-top: 16px;
+  color: #ffffff !important;
+  font-weight: 600;
+  border-radius: 8px;
+}
+.Signup button:hover {
+  background: linear-gradient(90deg, #0cbf86, #047857);
+}
+body {
+  font-family: 'Inter', sans-serif;
+  color: #e5e7eb;
+}

@@ -13,47 +13,34 @@ import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 export default function Routes() {
   return (
     <Switch>
-      <Route exact path="/login">
-        <Login />
-      </Route>
-      
-      <Route exact path="/signup">
-        <Signup />
+      {/* Home Route */}
+      <Route exact path="/">
+        <Home />
       </Route>
 
-      <Route exact path="/settings">
-        <Settings />
-      </Route>
-
-      <Route exact path="/notes/new">
-        <NewNote />
-      </Route>
-
-      <Route exact path="/notes/:id">
-        <Notes />
-      </Route>
-
+      {/* Guest only routes */}
       <UnauthenticatedRoute exact path="/login">
         <Login />
       </UnauthenticatedRoute>
-
       <UnauthenticatedRoute exact path="/signup">
         <Signup />
       </UnauthenticatedRoute>
 
+      {/* Authenticated routes */}
       <AuthenticatedRoute exact path="/settings">
         <Settings />
       </AuthenticatedRoute>
-
       <AuthenticatedRoute exact path="/notes/new">
         <NewNote />
       </AuthenticatedRoute>
-
       <AuthenticatedRoute exact path="/notes/:id">
         <Notes />
       </AuthenticatedRoute>
 
-      <Route component={NotFound} />
+      {/* Catch all unmatched routes */}
+      <Route>
+        <NotFound />
+      </Route>
     </Switch>
   );
 }

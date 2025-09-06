@@ -1,79 +1,113 @@
 import React, { useState, useEffect } from "react";
-import ListGroup from "react-bootstrap/ListGroup";
 import { useAppContext } from "../libs/contextLib";
-import { API } from "aws-amplify";
+import { API, Storage } from "aws-amplify";
 import { onError } from "../libs/errorLib";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsTrash } from "react-icons/bs";
 import { LinkContainer } from "react-router-bootstrap";
 import "./Home.css";
+
 export default function Home() {
   const [notes, setNotes] = useState([]);
   const { isAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     async function onLoad() {
-      if (!isAuthenticated) {
-        return;
-      }
+      if (!isAuthenticated) return;
+
       try {
         const notes = await loadNotes();
-        setNotes(notes);
+        const notesWithAttachments = await Promise.all(
+          notes.map(async (note) => {
+            if (note.attachment) {
+              try {
+                const url = await Storage.vault.get(note.attachment);
+                return { ...note, attachmentUrl: url };
+              } catch (err) {
+                console.error("Error fetching attachment URL:", err);
+                return { ...note, attachmentUrl: null };
+              }
+            }
+            return note;
+          })
+        );
+
+        setNotes(notesWithAttachments);
       } catch (e) {
         onError(e);
       }
       setIsLoading(false);
     }
+
     onLoad();
   }, [isAuthenticated]);
-  function loadNotes() {
+
+  async function loadNotes() {
     return API.get("notes", "/notes");
   }
+
+  async function handleDelete(noteId) {
+    const confirmed = window.confirm("Are you sure you want to delete this note?");
+    if (!confirmed) return;
+
+    try {
+      await API.del("notes", `/notes/${noteId}`);
+      setNotes((prevNotes) => prevNotes.filter((note) => note.noteId !== noteId));
+    } catch (e) {
+      onError(e);
+    }
+  }
+
   function renderNotesList(notes) {
     return (
-      <>
-        <LinkContainer to="/notes/new">
-          <ListGroup.Item action className="py-3 text-nowrap text-truncate">
-            <BsPencilSquare size={17} />
-            <span className="ml-2 font-weight-bold">Create a new note</span>
-          </ListGroup.Item>
-        </LinkContainer>
-        {notes.map(({ noteId, content, createdAt }) => (
-          <LinkContainer key={noteId} to={`/notes/${noteId}`}>
-            <ListGroup.Item action>
-              <span className="font-weight-bold">
-                {content.trim().split("\n")[0]}
-              </span>
-              <br />
-              <span className="text-muted">
-                Created: {new Date(createdAt).toLocaleString()}
-              </span>
-              serverless-stack.com 285 CALL THE LIST API Serverless Stack
-            </ListGroup.Item>
-          </LinkContainer>
+      <div className="notes">
+        {notes.map(({ noteId, content, createdAt, attachmentUrl }) => (
+          <div key={noteId} className="note-card">
+            {attachmentUrl && <img src={attachmentUrl} alt="thumb" />}
+            <div className="note-title">{content.trim().split("\n")[0]}</div>
+            <div className="note-date">
+              Created: {new Date(createdAt).toLocaleString()}
+            </div>
+            <div className="note-card-footer">
+              <LinkContainer to={`/notes/${noteId}`}>
+                <span style={{ cursor: "pointer", color: "#06b6d4" }}>Open</span>
+              </LinkContainer>
+              <BsTrash
+                className="note-delete"
+                size={18}
+                onClick={() => handleDelete(noteId)}
+              />
+            </div>
+          </div>
         ))}
-      </>
+      </div>
     );
   }
 
   function renderLander() {
     return (
       <div className="lander">
-        <h1>Scratch</h1>
-        <p className="text-muted">A simple note taking app</p>
+        <h1>WriteNote</h1>
+        <p className="text-muted">A simple & easy note taking website</p>
       </div>
     );
   }
+
   function renderNotes() {
     return (
-      <div className="notes">
-        <h2 className="pb-3 mt-4 mb-3 border-bottom">Your Notes</h2>
-        <ListGroup>{!isLoading && renderNotesList(notes)}</ListGroup>
+      <div className="notes-wrapper">
+        {/* Header Row */}
+        <div className="notes-header">
+          <h2>Your Notes</h2>
+          <LinkContainer to="/notes/new">
+            <button className="new-note-btn">+ Create New Note</button>
+          </LinkContainer>
+        </div>
+
+        {!isLoading && renderNotesList(notes)}
       </div>
     );
   }
-  return (
-    <div className="Home">
-      {isAuthenticated ? renderNotes() : renderLander()}
-    </div>
-  );
+
+  return <div className="Home">{isAuthenticated ? renderNotes() : renderLander()}</div>;
 }

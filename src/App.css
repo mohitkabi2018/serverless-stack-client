@@ -1,3 +1,47 @@
 .App {
   
 }
+/* ===========================
+   Navbar
+=========================== */
+nav.navbar {
+  background-color: #1f2937 !important; /* slate-800 */
+  border-bottom: 1px solid #374151;     /* slate-700 */
+  border-radius: 1rem;
+}
+
+/* Brand (left "Scratch") */
+nav .navbar-brand {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #38bdf8 !important; /* cyan-400 accent */
+  letter-spacing: 0.5px;
+}
+
+nav .navbar-brand:hover {
+  color: #1b7198 !important; /* cyan-500 hover */
+}
+
+/* Links (Login, Signup, Settings, Logout) */
+nav a,
+nav .nav-link {
+  color: #e5e7eb !important; /* gray-200 */
+  font-weight: 500;
+  transition: color 0.2s ease, background 0.2s ease;
+  padding: 8px 14px;
+  border-radius: 6px;
+}
+
+nav a:hover,
+nav .nav-link:hover {
+  color: #38bdf8 !important; /* cyan-400 hover */
+  /*background-color: rgba(56, 189, 248, 0.1);  soft cyan highlight */
+}
+
+/* Active link highlight */
+nav .nav-link.active {
+  color: #f9fafb !important; /* gray-50 */
+  background-color: rgba(56, 189, 248, 0.2); /* stronger cyan highlight */
+  border-radius: 6px;
+}
+
